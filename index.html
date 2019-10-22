@@ -8,24 +8,29 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script type="type/javascript">
-		function jsonp(url, callback) {
-		    var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-		    window[callbackName] = function(data) {
-			delete window[callbackName];
-			document.body.removeChild(script);
-			callback(data);
-		    };
+		$(document).ready(function(){
+			function jsonp(url, callback) {
+			    var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+			    window[callbackName] = function(data) {
+				delete window[callbackName];
+				document.body.removeChild(script);
+				callback(data);
+			    };
 
-		    var script = document.createElement('script');
-		    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' +  callbackName;
-		    document.body.appendChild(script);
-		}
+			    var script = document.createElement('script');
+			    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' +  callbackName;
+			    document.body.appendChild(script);
+			}
 
-		jsonp('http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=callback&tags=london&tagmode=any&format=json', callback);
+			jsonp('https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=callback&tags=london&tagmode=any&format=json', callback);
 
-		function callback(data){
-		 console.log(data);  
-		}
+			function callback(data){
+				var items = data.items;
+				items.map(function(item){
+					$('body').append('<div class="item"><img src="'+item.media.m+'"/></div>')
+				})
+			}
+		})
 	</script>
 </body>
 </html>
